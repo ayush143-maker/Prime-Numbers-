@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Do Prime Numbers Have A Pattern?</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@300;400&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden;user-select:none}
+#stage{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);overflow:hidden}
+canvas{display:block}
+.ov{position:absolute;left:0;width:100%;text-align:center;white-space:nowrap;pointer-events:none}
+#title{position:absolute;top:16%;left:50%;width:auto;opacity:0;
+  font-family:'Segoe UI','Helvetica Neue',Arial,sans-serif;font-style:italic;font-weight:800;
+  font-size:clamp(22px,6.8vmin,46px);letter-spacing:.5px;color:#8f7bff;
+  filter:drop-shadow(0 0 16px rgba(120,110,255,.45))}
+.eq{font-family:'Dancing Script','Segoe Script',cursive;font-style:italic;font-weight:300;
+    font-size:clamp(18px,5.5vmin,34px);letter-spacing:1px;opacity:0}
+.eqt{color:#c9a6ff}
+#btn{position:absolute;left:50%;top:calc(50% - 25px);transform:translateX(-50%);
+     width:168px;height:50px;cursor:pointer;z-index:9;transition:scale .25s;
+     filter:drop-shadow(0 0 10px rgba(106,92,255,.35))}
+#btn.end{top:auto;bottom:5%}
+#btn:hover{scale:1.06}
+#btn:active{scale:.97}
+#btnTxt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+     font:600 16px 'Segoe UI',Arial,sans-serif;letter-spacing:3px;color:#9fc6ff}
+@supports (-webkit-background-clip:text) or (background-clip:text){
+ #title,#btnTxt{background-image:linear-gradient(90deg,#4169e1,#8f7bff,#c9a6ff);
+   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+ .eqt{background-image:linear-gradient(90deg,#ff6fb0,#5b8cff,#c9a6ff);
+   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+}
+</style>
+</head>
+<body>
+<div id="stage">
+<canvas id="cv"></canvas>
+<div id="title">Do Prime Numbers Have A Pattern?</div>
+<div id="btn">
+  <svg width="168" height="50" viewBox="0 0 168 50">
+    <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9bd7ff"/><stop offset=".5" stop-color="#c3a6ff"/>
+      <stop offset="1" stop-color="#6a5cff"/></linearGradient></defs>
+    <rect x="1.25" y="1.25" width="165.5" height="47.5" rx="23.75"
+          fill="none" stroke="url(#rg)" stroke-width="2.5"/>
+  </svg>
+  <span id="btnTxt">Play</span>
+</div>
+</div>
+<audio id="bgm" src="sky.mp3" preload="auto"></audio>
+<script>
+"use strict";
+const DUR=48000, ORBIT=10000, TOTAL=DUR+ORBIT;   // 48s + 10s orbital = 58s
+const N=2500,N0=12,RAD=Math.PI/180,TAU=Math.PI*2,D0=0.025;
+const clamp01=v=>v<0?0:v>1?1:v, easeOut=u=>1-Math.pow(1-u,3), smooth=u=>u*u*(3-2*u);
+function setS(el,p,v){if(el['_'+p]!==v){el.style[p]=v;el['_'+p]=v}}
+function setT(el,v){if(el._t!==v){el.textContent=v;el._t=v}}
+
+function sieve(m){const s=new Uint8Array(m+1).fill(1);s[0]=s[1]=0;
+ for(let i=2;i*i<=m;i++)if(s[i])for(let j=i*i;j<=m;j+=i)s[j]=0;
+ const r=[];for(let i=2;i<=m;i++)if(s[i])r.push(i);return r}
+const P=sieve(30000).slice(0,N);
+const X=new Float64Array(N),YV=new Float64Array(N),ZV=new Float64Array(N),
+      BIRTH=new Float64Array(N),TXT=[],COLC=[];
+const SPRS=new Array(N),SPR={};
+function sprite(h){if(SPR[h])return SPR[h];
+ const c=document.createElement('canvas');c.width=c.height=64;
+ const g=c.getContext('2d'),gr=g.createRadialGradient(32,32,0,32,32,32);
+ gr.addColorStop(0,`hsla(${h},95%,80%,.95)`);gr.addColorStop(.3,`hsla(${h},90%,62%,.5)`);
+ gr.addColorStop(.65,`hsla(${h},90%,55%,.12)`);gr.addColorStop(1,`hsla(${h},90%,50%,0)`);
+ g.fillStyle=gr;g.fillRect(0,0,64,64);return SPR[h]=c}
+for(let i=0;i<N;i++){const p=P[i];
+ X[i]=p*Math.sin(p)*Math.cos(p);YV[i]=p*Math.sin(p)**2;ZV[i]=p*Math.cos(p);
+ const hue=(200+i*0.6)%360;
+ TXT.push(`hsl(${hue|0},90%,78%)`);COLC.push(`hsl(${hue|0},90%,66%)`);
+ SPRS[i]=sprite((hue/10|0)*10+5);
+ BIRTH[i]=Math.max(D0,Math.log(i/N0)/Math.log(N/N0))}
+
+const stage=document.getElementById('stage'),cv=document.getElementById('cv'),
+      ctx=cv.getContext('2d',{alpha:false}),
+      btn=document.getElementById('btn'),btnTxt=document.getElementById('btnTxt'),
+      titleEl=document.getElementById('title'),bgm=document.getElementById('bgm');
+let W,H,DPR,VG;
+function resize(){DPR=Math.min(1.5,devicePixelRatio||1);
+ let h=innerHeight,w=h*9/16;if(w>innerWidth){w=innerWidth;h=w*16/9}
+ stage.style.width=w+'px';stage.style.height=h+'px';
+ cv.width=w*DPR|0;cv.height=h*DPR|0;cv.style.width=w+'px';cv.style.height=h+'px';
+ W=w;H=h;VG=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.35,W/2,H/2,Math.max(W,H)*.72);
+ VG.addColorStop(0,'rgba(0,0,0,0)');VG.addColorStop(1,'rgba(0,0,0,.5)')}
+addEventListener('resize',resize);resize();
+
+const EQS=[
+ {y:.740,s:.30,d:.07,txt:'x = p sin p cos p'},
+ {y:.782,s:.34,d:.07,txt:'y = p sin\u00B2 p'},
+ {y:.824,s:.38,d:.07,txt:'z = p cos p'}];
+for(const L of EQS){L.div=document.createElement('div');L.div.className='eq ov';
+ L.div.style.top=(L.y*100)+'%';
+ L.sp=document.createElement('span');L.sp.className='eqt';L.div.appendChild(L.sp);
+ stage.appendChild(L.div)}
+
+/* main camera + 10s gyroscopic orbital with wide background pull-back */
+function camAt(t,s){
+ const te=t-Math.sin(TAU*t)/TAU;
+ const rise=smooth(clamp01((te-0.5)/0.5));
+ const dip=Math.sin(Math.PI*s), dip2=dip*dip;
+ return{
+  az:(25+200*te)*RAD + TAU*s,          // full 360° orbit (back side included)
+  el:(10+70*rise-50*dip2)*RAD,         // 80°->30°->80° side angles
+  D:3.6-0.4*te+1.8*dip2,               // mid orbit: pull-back wide background shot
+  roll:0.12*Math.sin(TAU*s)}}
+
+let playing=false,started=false,tCur=0,lastNow=performance.now();
+function playMusic(){try{if(bgm){bgm.currentTime=0;
+ const pr=bgm.play();if(pr&&pr.catch)pr.catch(()=>{})}}catch(e){}}
+btn.onclick=()=>{tCur=0;playing=true;started=true;
+ btn.style.display='none';btn.classList.remove('end');playMusic()};
+
+function render(t,s){
+ const sec=t*DUR/1000;
+ const nf=N0*Math.pow(N/N0,t), i0=Math.min(N-1,Math.floor(nf)), fr=nf-i0, n=i0+1;
+ const R=1.15*(P[i0]+(P[Math.min(i0+1,N-1)]-P[i0])*fr);
+ const{az,el,D,roll}=camAt(t,s),F=2.4,S=Math.min(W,H)*1.05,cx=W/2,cy=H*.55;
+ const cz=Math.cos(az),sz=Math.sin(az),ce=Math.cos(el),sn=Math.sin(el);
+ const proj=(wx,wy,wz)=>{const x1=wx*cz-wy*sz,y1=wx*sz+wy*cz,
+   d=y1*ce-wz*sn,v=wz*ce+y1*sn,pf=F/(D-d);
+   return[cx+x1*pf*S,cy-v*pf*S,pf]};
+
+ ctx.save();ctx.translate(cx,cy);ctx.rotate(roll);ctx.translate(-cx,-cy);
+
+ const axA=.5*clamp01(t/.012)*(1-clamp01((t-.45)/.1));
+ if(axA>0){ctx.strokeStyle=`rgba(210,210,210,${axA})`;ctx.lineWidth=1;
+  for(let k=0;k<3;k++){const a=k===0?[2.5,0,0]:k===1?[0,2.5,0]:[0,0,2.5];
+   const p1=proj(a[0],a[1],a[2]),p2=proj(-a[0],-a[1],-a[2]);
+   ctx.beginPath();ctx.moveTo(p1[0],p1[1]);ctx.lineTo(p2[0],p2[1]);ctx.stroke()}}
+
+ ctx.globalCompositeOperation='lighter';
+ ctx.imageSmoothingEnabled=true;                 // smooth round dots, aligned look
+ const base=(Math.min(W,H)/720)*(4.2-2.6*t)*2.2,invR=1/R;
+ for(let i=0;i<n;i++){
+  const age=(t-BIRTH[i])*DUR;if(age<=0)continue;
+  const u=age>500?1:smooth(clamp01(age/500));
+  const wx=X[i]*invR,wy=ZV[i]*invR,wz=YV[i]*invR;
+  const x1=wx*cz-wy*sz,y1=wx*sz+wy*cz;
+  const d=y1*ce-wz*sn,v=wz*ce+y1*sn,pf=F/(D-d);
+  const g=base*pf*(0.25+0.75*u);
+  if(g<0.35)continue;
+  const sx=cx+x1*pf*S, sy=cy-v*pf*S;
+  if(u<1)ctx.globalAlpha=0.15+0.85*u;
+  if(g<1.2){ctx.fillStyle=COLC[i];               // round dot (no squares)
+   ctx.beginPath();ctx.arc(sx,sy,Math.max(0.8,g*0.8),0,TAU);ctx.fill()}
+  else ctx.drawImage(SPRS[i],sx-g,sy-g,g*2,g*2);
+  if(u<1)ctx.globalAlpha=1}
+
+ ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;
+ if(t<.22){
+  const fs=(16-9*clamp01(t/.22))*Math.min(W,H)/720;
+  ctx.font=fs+'px "Times New Roman",serif';ctx.textAlign='center';
+  for(let k=0;k<30&&k<n;k++){ctx.globalAlpha=clamp01((t-BIRTH[k])/.01);
+   const q=proj(X[k]*invR,ZV[k]*invR,YV[k]*invR);
+   ctx.fillStyle=TXT[k];ctx.fillText(P[k],q[0],q[1]-fs)}}
+ ctx.restore();
+ ctx.globalAlpha=1;ctx.fillStyle=VG;ctx.fillRect(0,0,W,H);
+
+ if(sec<3.5){
+  const eIn=easeOut(clamp01(t/.02)), eOut=1-clamp01((sec-2)/0.7);
+  setS(titleEl,'opacity',eIn*eOut);
+  setS(titleEl,'transform',`translate(-50%,${(1-eIn)*24-(1-eOut)*24}px)`)}
+
+ for(const L of EQS){
+  const u=clamp01((t-L.s)/L.d);
+  setT(L.sp,L.txt.slice(0,Math.floor(L.txt.length*u)));
+  setS(L.div,'opacity',1-clamp01((t-.80)/.04))}}
+
+function frame(now){
+ const dt=Math.min(50,now-lastNow);lastNow=now;
+ if(playing){tCur+=dt;
+  if(tCur>=TOTAL){tCur=TOTAL;playing=false;
+   btnTxt.textContent='Replay';btn.classList.add('end');btn.style.display='block'}}
+ ctx.setTransform(DPR,0,0,DPR,0,0);ctx.globalAlpha=1;
+ ctx.globalCompositeOperation='source-over';
+ ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+ if(started){
+  try{
+   const t=Math.min(1,tCur/DUR);
+   const sp=tCur>DUR?(tCur-DUR)/ORBIT:0;
+   render(t, sp>0?sp-Math.sin(TAU*sp)/TAU:0);
+  }catch(e){}}
+ requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
