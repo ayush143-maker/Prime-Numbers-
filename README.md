@@ -55,3 +55,9 @@ These are recommended future checks, not claims that the page has been tested or
 - [ ] Review text, control, and focus-indicator contrast against changing visual backgrounds. Check that the question and explanatory text remain readable.
 - [ ] If the visualization conveys information, check whether a text explanation communicates its meaning without relying on animation alone.
 - [ ] Check whether animation can be paused or reduced, including when reduced motion is preferred, and ensure audio remains controllable.
+
+## Final release review
+
+- Open `index.html` from the published location and confirm the page loads as expected.
+- Test with network access available and keep a sensible fallback for externally loaded resources.
+- Review the published result once on a narrow screen and once on a wider screen; treat this as a release check, not an automated test report.
