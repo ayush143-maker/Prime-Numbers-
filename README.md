@@ -23,10 +23,19 @@ To personalize the visible wording or appearance, inspect and edit the existing 
 These are actions to perform after a change, not verified results:
 
 - Open `index.html` or the local server URL and inspect the experience.
-- Try the play control and observe the animated experience. Check that `sky.mp3` loads from the expected relative path and review the audio behavior if you changed the file or its reference.
-- Check any image or media paths you changed in `index.html`; keep local references consistent with files beside the page unless you update the paths.
+- Try the play control and observe the animated experience. Review audio behavior if you changed the file or its reference.
 - Inspect the page at narrow mobile-sized and wide desktop-sized viewports. Check that the visualisation and play control remain visible and usable.
-- If the Google Fonts link changed, inspect the typography with the external font available and check its fallback appearance if it is unavailable.
+
+## Asset and loading review checklist
+
+These are review steps, not measured performance results or claims that assets have been checked:
+
+- Check the `sky.mp3` reference in `index.html` against the local file beside it. If it is moved or renamed, update the reference and review playback behavior.
+- Search `index.html` for local image, audio, font, and other media references, and confirm each path resolves to the intended file. The supplied root-file list lists `index.html` and `sky.mp3`; check the page itself before assuming there are no additional references.
+- Review the audio file size and any image dimensions or file sizes for referenced media. Consider whether large files can be reduced without undermining the experience; no media sizes have been measured here.
+- Before removing an asset, check whether `index.html` still references it. Keep only files no longer needed by the experience out of the active asset set, while preserving intended source material.
+- The page links to Dancing Script through Google Fonts. Confirm that the external font is intentional and needed, and check the fallback appearance if the request fails. Inspect `index.html` for any external scripts and verify that each is intentional rather than assuming the page has none.
+- After changes, review the page with resources available and consider the experience when the font or audio resource is unavailable.
 
 ## Accessibility review checklist
 
