@@ -12,4 +12,4 @@ Then visit http://localhost:8000. Use the play control to engage with the animat
 
 ## Editing the experience
 
-The visualisation is in `index.html`, and `sky.mp3` is the accompanying audio asset. Keep its reference in sync if replacing the file.
+The visualisation is in the root-level `index.html`, and `sky.mp3` is the accompanying audio asset. Keep its reference in sync if replacing the file.
