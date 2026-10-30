@@ -8,8 +8,8 @@ Open `index.html` in a browser. Alternatively, from the project root, start a lo
 
     python -m http.server 8000
 
-Then visit http://localhost:8000. Use the play control to engage with the animated experience and review changes.
+Then visit http://localhost:8000. Use the play control to engage with the animated experience and review changes. If the accompanying audio is unavailable, check that `sky.mp3` remains at the referenced relative path.
 
 ## Editing the experience
 
-The visualisation is in the root-level `index.html`, and `sky.mp3` is the accompanying audio asset. Keep its reference in sync if replacing the file.
+The visualisation is in the root-level `index.html`, and `sky.mp3` is the accompanying audio asset. Keep its reference in sync if replacing the file. No deployment provider or configuration is documented.
