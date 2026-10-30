@@ -4,11 +4,13 @@ A compact visual experiment built around the question “Do Prime Numbers Have a
 
 ## Preview locally
 
-Open `index.html` in a browser. Alternatively, from the project root, start a local server:
+Open `index.html` in a browser, or start a local server from the project root:
 
-    python -m http.server 8000
+```sh
+python -m http.server 8000
+```
 
-Then visit http://localhost:8000. Use the play control to engage with the animated experience and review changes. If the accompanying audio is unavailable, check that `sky.mp3` remains at the referenced relative path.
+Then visit <http://localhost:8000>. Use the play control to engage with the experience and review changes. If the audio is unavailable, check that `sky.mp3` remains at the referenced relative path.
 
 ## Editing the experience
 
