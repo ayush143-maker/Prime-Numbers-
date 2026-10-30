@@ -4,7 +4,7 @@ A compact visual experiment built around the question “Do Prime Numbers Have a
 
 ## Preview locally
 
-Open `index.html` in a modern browser. Alternatively, from the project root, start a local server:
+Open `index.html` in a browser. Alternatively, from the project root, start a local server:
 
     python -m http.server 8000
 
