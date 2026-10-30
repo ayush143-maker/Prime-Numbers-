@@ -1,6 +1,6 @@
 # Prime-Numbers-
 
-A compact visual experiment built around the question “Do Prime Numbers Have a Pattern?” It presents the topic as an animated browser experience with a play control and includes a local audio file.
+A compact visual experiment built around the question “Do Prime Numbers Have a Pattern?” It presents the topic as an animated browser experience with a play control and includes the local audio file `sky.mp3`.
 
 ## Preview locally
 
