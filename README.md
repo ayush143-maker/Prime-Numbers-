@@ -1,6 +1,6 @@
 # Prime-Numbers-
 
-A compact visual experiment built around the question “Do Prime Numbers Have a Pattern?” It presents the topic as an animated browser experience with a play control and a local audio file.
+A compact visual experiment built around the question “Do Prime Numbers Have a Pattern?” It presents the topic as an animated browser experience with a play control and includes a local audio file.
 
 ## Preview locally
 
@@ -8,7 +8,7 @@ Open `index.html` in a modern browser. Alternatively, from the project root, sta
 
     python -m http.server 8000
 
-Then visit http://localhost:8000.
+Then visit http://localhost:8000. Use the play control to engage with the animated experience.
 
 ## Editing the experience
 
