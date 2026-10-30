@@ -4,11 +4,11 @@ A compact visual experiment built around the question “Do Prime Numbers Have a
 
 ## Preview locally
 
-Open `index.html` in a modern browser, or run a local server:
+Open `index.html` in a modern browser. Alternatively, from the project root, start a local server:
 
     python -m http.server 8000
 
-Visit http://localhost:8000.
+Then visit http://localhost:8000.
 
 ## Editing the experience
 
