@@ -22,6 +22,12 @@ To change visible wording or appearance, inspect the markup and styles in `index
 
 The listed files include no environment-variable template or configuration file. Do not put passwords, tokens, or other real secrets in `index.html` or assets such as `sky.mp3`. Anything included in browser-delivered resources can be inspected by visitors. No backend or secret-storage mechanism is documented. Review page content and audio assets before committing them to ensure they are suitable for public access and that you have permission to distribute them.
 
+## Contributor handoff
+
+Keep changes scoped to `index.html` or the specific audio asset being updated. Preserve filenames and relative references, especially the `sky.mp3` reference and the Google Fonts link, unless updating those references is part of the change. Summarize what changed and whether it affects the visualization, wording, or audio.
+
+Before publishing, manually open the page and review the changed visual behavior and play control; if audio was changed, try the control with the updated `sky.mp3`. This is a review checklist, not a record of checks already completed.
+
 ## Troubleshooting
 
 Use these as diagnostic steps; they are not reports of known failures:
