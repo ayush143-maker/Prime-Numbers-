@@ -27,3 +27,14 @@ These are actions to perform after a change, not verified results:
 - Check any image or media paths you changed in `index.html`; keep local references consistent with files beside the page unless you update the paths.
 - Inspect the page at narrow mobile-sized and wide desktop-sized viewports. Check that the visualisation and play control remain visible and usable.
 - If the Google Fonts link changed, inspect the typography with the external font available and check its fallback appearance if it is unavailable.
+
+## Accessibility review checklist
+
+These are future checks to perform after a change; they are not claims that the page has been tested or found accessible:
+
+- Use only a keyboard to reach and operate the play control. Check that tab order is sensible and that the experience does not require pointer input to start or stop.
+- Check that keyboard focus is clearly visible on the play control and remains visible against the page's animated visuals.
+- Check that the play control has a meaningful accessible name and that its label or state makes clear what action it will perform. If the audio is controlled separately in the page, review that control's name and operation too.
+- Review text, control, and focus-indicator contrast, including against changing visual backgrounds. Check that the question and any explanatory wording remain readable.
+- If the visualisation conveys information, check whether a text explanation or other alternative communicates its relevant meaning without relying on the animation alone. For any images added later, provide appropriate alternatives when they convey content.
+- Check whether the animation can be paused or reduced, and review behavior when the user's reduced-motion preference is active. Consider whether audio behavior remains understandable and controllable during that review.
