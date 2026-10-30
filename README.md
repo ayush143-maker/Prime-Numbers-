@@ -1,19 +1,15 @@
 # Prime-Numbers-
 
-A compact interactive page exploring the question “Do Prime Numbers Have a Pattern?”, with a play control and an included audio file.
+**Prime-Numbers-** is a compact visual experiment built around the question **“Do Prime Numbers Have a Pattern?”** It presents the topic as an animated, browser-based experience rather than a conventional written explanation, with a play control and a local audio file.
 
-## Run locally
+## Preview locally
 
-Open index.html in a modern browser. If browser restrictions block local assets or APIs, serve the folder over HTTP.
+Open index.html in a modern browser. No package installation is needed. To run a local server, use:
 
-## Structure and assets
+    python -m http.server 8000
 
-`index.html` is the primary entry point. Keep linked images, audio, scripts, and styles in their existing relative locations; renaming files may break references.
+Then visit http://localhost:8000.
 
-## Preview and deployment
+## Editing the experience
 
-Open the page in a modern browser. If local-file behavior is restricted, start a simple HTTP server from this folder and open the local address in your browser. For static hosting, publish the correct root folder and check asset paths after deployment.
-
-## Making changes
-
-Test the page after edits and check both phone-sized and desktop-sized viewports. Confirm that buttons and other visible interactions work in the deployed version as well as locally.
+The visualisation is contained in index.html, and sky.mp3 is the accompanying audio asset. Keep the audio reference in sync if the file is replaced. If you change the mathematical presentation, make sure the visual behaviour still supports the question introduced by the page.
