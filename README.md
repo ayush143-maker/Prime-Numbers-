@@ -8,7 +8,7 @@ Open `index.html` in a modern browser. Alternatively, from the project root, sta
 
     python -m http.server 8000
 
-Then visit http://localhost:8000. Use the play control to engage with the animated experience.
+Then visit http://localhost:8000. Use the play control to engage with the animated experience and review changes.
 
 ## Editing the experience
 
