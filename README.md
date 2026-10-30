@@ -18,6 +18,12 @@ The visualization is in the root-level `index.html`, and `sky.mp3` is the accomp
 
 To change visible wording or appearance, inspect the existing markup and styles in `index.html`; the supplied file list does not identify separate stylesheet or theme files. The page links to Dancing Script through Google Fonts. Keep `sky.mp3` beside `index.html` if retaining its current relative reference, or update the reference if the file moves.
 
+## Configuration and data handling
+
+The listed files include no environment-variable template or configuration file. Do not put passwords, tokens, or other real secrets in `index.html` or in assets such as `sky.mp3`. This is a browser-delivered experience: anything included in its HTML, scripts, or other resources can be inspected by visitors and cannot be kept secret. No backend or secret-storage mechanism is documented.
+
+Review page content and audio assets before committing them to ensure they are suitable for public access and that you have permission to distribute them. The page links to Google Fonts, so loading it may make a request to that external service; account for this when reviewing the page's external requests.
+
 ## Browser and platform reliability checklist
 
 This is a checklist for future review, not a record of completed testing or verified compatibility:
